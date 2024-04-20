@@ -1,0 +1,279 @@
+{
+  "swagger":"2.0",
+  "info":{
+     "title":"My Old Book Collection MVP - API",
+     "version":"1.0.0"
+  },
+  "paths":{
+     "/book/getall":{
+        "get":{
+           "description":"Get all registered books",
+           "tags":[
+              "books"
+           ],
+           "consumes":[
+              "application/json"
+           ],
+           "produces":[
+              "application/json"
+           ],
+           "responses":{
+              "200":{
+                 "description":"Success"
+              },
+              "400":{
+                 "description":"Invalid request data"
+              }
+           }
+        }
+     },
+     "/book/getbyid/{id}":{
+        "get":{
+           "description":"Get a book by id",
+           "tags":[
+              "books"
+           ],
+           "consumes":[
+              "application/json"
+           ],
+           "produces":[
+              "application/json"
+           ],
+           "parameters":[
+              {
+                 "name":"id",
+                 "in":"path",
+                 "description":"unique id to get a book",
+                 "schema":{
+                    "type":"integer"
+                 },
+                 "required":true
+              }
+           ],
+           "responses":{
+              "200":{
+                 "description":"Success"
+              },
+              "400":{
+                 "description":"Invalid request data"
+              }
+           }
+        }
+     },
+     "/book/put/{id}":{
+        "put":{
+           "description":"Edit a book by id",
+           "tags":[
+              "books"
+           ],
+           "consumes":[
+              "application/json"
+           ],
+           "produces":[
+              "application/json"
+           ],
+           "parameters":[
+              {
+                 "name":"id",
+                 "in":"path",
+                 "description":"unique id to get a book",
+                 "schema":{
+                    "type":"integer"
+                 },
+                 "required":true
+              },
+              {
+                 "name":"book data",
+                 "in":"body",
+                 "description":"JSON book data for the api",
+                 "required":true,
+                 "schema":{
+                    "$ref":"#/definitions/BookData"
+                 }
+              }
+           ],
+           "responses":{
+              "200":{
+                 "description":"Success"
+              },
+              "400":{
+                 "description":"Invalid request data"
+              }
+           }
+        }
+     },
+     "/book/post":{
+        "post":{
+           "description":"Register a new book",
+           "tags":[
+              "books"
+           ],
+           "consumes":[
+              "application/json"
+           ],
+           "produces":[
+              "application/json"
+           ],
+           "parameters":[
+              {
+                 "name":"book data",
+                 "in":"body",
+                 "description":"JSON book data for the api",
+                 "required":true,
+                 "schema":{
+                    "$ref":"#/definitions/BookData"
+                 }
+              }
+           ],
+           "responses":{
+              "200":{
+                 "description":"Success"
+              },
+              "400":{
+                 "description":"Invalid request data"
+              }
+           }
+        }
+     },
+     "/book/delete/{id}":{
+        "delete":{
+           "description":"Delete a book",
+           "tags":[
+              "books"
+           ],
+           "consumes":[
+              "application/json"
+           ],
+           "produces":[
+              "application/json"
+           ],
+           "parameters":[
+              {
+                 "name":"id",
+                 "in":"path",
+                 "description":"unique id to delete a single book",
+                 "schema":{
+                    "type":"integer"
+                 },
+                 "required":true
+              }
+           ],
+           "responses":{
+              "200":{
+                 "description":"Success"
+              },
+              "400":{
+                 "description":"Invalid request data"
+              }
+           }
+        }
+     },
+     "/user/auth":{
+        "post":{
+           "description":"Authenticate User",
+           "tags":[
+              "users"
+           ],
+           "consumes":[
+              "application/json"
+           ],
+           "produces":[
+              "application/json"
+           ],
+           "parameters":[
+            {
+               "name":"user data",
+               "in":"body",
+               "description":"JSON book data for the api",
+               "required":true,
+               "schema":{
+                  "$ref":"#/definitions/AuthUserData"
+               }
+            }
+         ],
+           "responses":{
+              "200":{
+                 "description":"Success"
+              },
+              "400":{
+                 "description":"Invalid request data"
+              }
+           }
+        }
+     },
+     "/user/post":{
+        "post":{
+           "description":"Register a user",
+           "tags":[
+              "users"
+           ],
+           "consumes":[
+              "application/json"
+           ],
+           "produces":[
+              "application/json"
+           ],
+           "parameters":[
+              {
+                 "name":"user data",
+                 "in":"body",
+                 "description":"JSON book data for the api",
+                 "required":true,
+                 "schema":{
+                    "$ref":"#/definitions/UserData"
+                 }
+              }
+           ],
+           "responses":{
+              "200":{
+                 "description":"Success"
+              },
+              "400":{
+                 "description":"Invalid request data"
+              }
+           }
+        }
+     }
+  },
+  "definitions":{
+     "BookData":{
+        "type":"object",
+        "properties":{
+           "id":{
+              "type":"integer"
+           },
+           "title":{
+              "type":"string"
+           },
+           "writer":{
+              "type":"string"
+           }
+        }
+     },
+     "UserData":{
+        "type":"object",
+        "properties":{
+           "name":{
+              "type":"string"
+           },
+           "email":{
+              "type":"string"
+           },
+           "password":{
+              "type":"string"
+           }
+        }
+     },
+     "AuthUserData":{
+        "type":"object",
+        "properties":{
+           "email":{
+              "type":"string"
+           },
+           "password":{
+              "type":"string"
+           }
+        }
+     }
+  }
+}
