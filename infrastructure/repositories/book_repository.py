@@ -8,39 +8,47 @@ def get_db_connection():
 
 def getAllBooks():
     conn = get_db_connection()
-    books = conn.execute('SELECT * FROM books').fetchall()
-    conn.close()
-
-    books_result = []
-
-    for row in books:
-        books_result.append({"id":row['id'], "title": row['title'], "writer": row['writer'], "created": row['created']})
-
+    try:
+        books = conn.execute('SELECT * FROM books').fetchall()
+        books_result = [{"id": row['id'], "title": row['title'], "writer": row['writer'], "created": row['created']} for row in books]
+    finally:
+        conn.close()
     return books_result
 
 def getBookById(id):
     conn = get_db_connection()
-    books = conn.execute('SELECT * FROM books WHERE id = ?', (id,)).fetchall()
-    conn.close()
+    try:
+        book = conn.execute('SELECT * FROM books WHERE id = ?', (id,)).fetchone()
+        if book:
+            return {"id": book['id'], "title": book['title'], "writer": book['writer'], "created": book['created']}
+        else:
+            return None
+    finally:
+        conn.close()
 
-    for row in books:
-        return {"id":row['id'], "title": row['title'], "writer": row['writer'], "created": row['created']}
-    
 def updateBook(request, id):
     conn = get_db_connection()
-    conn.execute('UPDATE books set title = ?, writer = ? WHERE id = ?', (request.get("title"), request.get("writer"), id,))
-    conn.commit()
-    conn.close()
-    return getBookById(id)
+    try:
+        conn.execute('UPDATE books SET title = ?, writer = ? WHERE id = ?', 
+                     (request.get("title"), request.get("writer"), id))
+        conn.commit()
+        return getBookById(id)
+    finally:
+        conn.close()
 
 def insertBook(request):
     conn = get_db_connection()
-    conn.execute("INSERT INTO books (title, writer, created) VALUES (?, ?, ?)", (request.get("title"), request.get("writer"), datetime.now()))
-    conn.commit()
-    conn.close()
+    try:
+        conn.execute("INSERT INTO books (title, writer, created) VALUES (?, ?, ?)",
+                     (request.get("title"), request.get("writer"), datetime.now()))
+        conn.commit()
+    finally:
+        conn.close()
 
 def deleteBook(id):
     conn = get_db_connection()
-    conn.execute("DELETE FROM books WHERE id = ?", (id,))
-    conn.commit()
-    conn.close()
+    try:
+        conn.execute("DELETE FROM books WHERE id = ?", (id,))
+        conn.commit()
+    finally:
+        conn.close()

@@ -1,0 +1,227 @@
+openapi: 3.0.1
+info:
+  title: API de Livros e Usuários
+  description: API para gerenciamento de livros e autenticação de usuários.
+  version: 1.0.0
+servers:
+  - url: http://localhost:5000
+paths:
+  /book/getall:
+    get:
+      summary: Retorna todos os livros.
+      responses:
+        '200':
+          description: Lista de livros.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                      example: 1
+                    title:
+                      type: string
+                      example: "O Grande Gatsby"
+                    writer:
+                      type: string
+                      example: "F. Scott Fitzgerald"
+                    created:
+                      type: string
+                      format: date
+                      example: "2024-09-15"
+
+  /book/getbyid/{id}:
+    get:
+      summary: Retorna um livro pelo ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Detalhes do livro.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: "O Grande Gatsby"
+                  writer:
+                    type: string
+                    example: "F. Scott Fitzgerald"
+                  created:
+                    type: string
+                    format: date
+                    example: "2024-09-15"
+        '404':
+          description: Livro não encontrado.
+        '400':
+          description: Solicitação inválida.
+
+  /book/post:
+    post:
+      summary: Adiciona um novo livro.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "O Grande Gatsby"
+                writer:
+                  type: string
+                  example: "F. Scott Fitzgerald"
+      responses:
+        '200':
+          description: Livro adicionado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  title:
+                    type: string
+                    example: "O Grande Gatsby"
+                  writer:
+                    type: string
+                    example: "F. Scott Fitzgerald"
+        '400':
+          description: Solicitação inválida.
+
+  /user/auth:
+    post:
+      summary: Autentica um usuário.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "user@example.com"
+                password:
+                  type: string
+                  example: "password123"
+      responses:
+        '200':
+          description: Autenticação bem-sucedida.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  nome:
+                    type: string
+                    example: "Mattheus"
+                  email:
+                    type: string
+                    example: "mattheustoscano@outlook.com"
+                  id:
+                    type: integer
+                    example: 9
+        '401':
+          description: Credenciais inválidas.
+        '400':
+          description: Solicitação inválida.
+
+  /user/post:
+    post:
+      summary: Adiciona um novo usuário.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "user@example.com"
+                password:
+                  type: string
+                  example: "password123"
+      responses:
+        '200':
+          description: Usuário adicionado com sucesso.
+        '400':
+          description: Solicitação inválida.
+
+  /book/put/{id}:
+    put:
+      summary: Atualiza um livro pelo ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "O Grande Gatsby"
+                writer:
+                  type: string
+                  example: "F. Scott Fitzgerald"
+      responses:
+        '200':
+          description: Livro atualizado com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  title:
+                    type: string
+                    example: "O Grande Gatsby"
+                  writer:
+                    type: string
+                    example: "F. Scott Fitzgerald"
+                  created:
+                    type: string
+                    format: date
+                    example: "2024-09-15"
+        '400':
+          description: Solicitação inválida.
+
+  /book/delete/{id}:
+    delete:
+      summary: Exclui um livro pelo ID.
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Livro excluído com sucesso.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "sucesso"
+        '400':
+          description: Solicitação inválida.

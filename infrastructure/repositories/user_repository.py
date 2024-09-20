@@ -6,16 +6,35 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-def autenticateUser(request):
+def authenticateUser(request):
     conn = get_db_connection()
-    users = conn.execute('SELECT * FROM users WHERE email = ? AND senha = ?',(request.get("email"),request.get("password"),)).fetchall()
-    conn.close()
+    try:
+        # Use fetchone() since we're expecting a single result
+        user = conn.execute(
+            'SELECT * FROM users WHERE email = ? AND senha = ?',
+            (request.get("email"), request.get("password"))
+        ).fetchone()
+    finally:
+        conn.close()
 
-    for row in users:
-        return {"nome":row['nome'], "email": row['email'], "id": row['id']}
+    if user:
+        # Return user data if found
+        return {
+            "nome": user['nome'],
+            "email": user['email'],
+            "id": user['id']
+        }
+    else:
+        # Return None or an empty dictionary if not found
+        return None
 
 def insertUser(request):
     conn = get_db_connection()
-    conn.execute("INSERT INTO users (nome, email, senha) VALUES (?, ?, ?)", (request.get("name"), request.get("email"), request.get("password")))
-    conn.commit()
-    conn.close()
+    try:
+        conn.execute(
+            "INSERT INTO users (nome, email, senha) VALUES (?, ?, ?)",
+            (request.get("name"), request.get("email"), request.get("password"))
+        )
+        conn.commit()
+    finally:
+        conn.close()
